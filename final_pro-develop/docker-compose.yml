@@ -1,0 +1,29 @@
+version: '3.9'
+services:
+  db:
+    image: postgres
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+  django:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  celery:
+    build: .
+    volumes:
+      - .:/code
+    command: celery -A tasks worker -l info
+    depends_on:
+      - redis
+
+  redis:
+      image: redis
+      volumes:
+        - ./redis.conf:/usr/local/etc/redis/redis.conf
+      ports:
+        - "6380"
