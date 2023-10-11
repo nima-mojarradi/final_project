@@ -27,3 +27,4 @@ services:
         - ./redis.conf:/usr/local/etc/redis/redis.conf
       ports:
         - "6380"
+        
