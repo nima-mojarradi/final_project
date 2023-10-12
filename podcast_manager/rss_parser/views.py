@@ -14,4 +14,3 @@ class RequestUrl(APIView):
             ParseChannel(url=url)
             return Response(status=status.HTTP_201_CREATED)
             
-
