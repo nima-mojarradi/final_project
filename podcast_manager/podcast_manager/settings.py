@@ -160,7 +160,7 @@ AUTH_USER_MODEL = "user.CustomUser"
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', 'redis://redis:6379/0')
 CELERY_RESULT_BACKEND = os.environ.get('CELERY_BROKER', 'redis://redis:6379/0')
 
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+# CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 CACHES = {
     "default": {

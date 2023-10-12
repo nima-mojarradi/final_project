@@ -2,42 +2,48 @@ import requests
 import xml.etree.ElementTree as ET
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import ModelParser
+from .models import EpisodeData, PodcastData, RSSLink
 import time
 from celery import Celery
-from .models import ModelParser
-app = Celery('tasks', broker='amqp://localhost')
-@app.task(bind=True, max_retries=3)
-def ParseRssFeed(self, url):
-    try:
-        response = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
-        root = ET.fromstring(response.content)
-        items = []
-        for item in root.iter('item'):
-            title = item.find('title').text
-            description = item.find('description').text
-            link = item.find('link').text
-            itunes_author = item.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}author')
-            itunes_duration = item.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}:duration')
-            itunes_images = item.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}:image')
-            itunes_category = item.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}:category')
-            rss_feed_item = ModelParser(
+
+def ParseChannel(url):
+    response = requests.get(url)
+    root = ET.fromstring(response.content)
+    title = root.find('channel/title').text
+    description = root.find('channel/description').text
+    link = root.find('channel/link').text
+    language = root.find('language')
+    itunes_author = root.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}author').text
+    itunes_duration = root.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}:duration').text
+    images = root.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}:image').text
+    itunes_category = root.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}:category').text
+    rss_link, created = RSSLink.objects.get_or_create(url=url)
+
+    rss_feed_items = PodcastData.objects.get_or_create(
                 title=title,
                 description=description,
                 link=link,
                 itunes_author=itunes_author.text if itunes_author is not None else None,
                 itunes_duration=itunes_duration.text if itunes_duration is not None else None,
-                category=itunes_category
+                rss_link = rss_link,
                 )
-            rss_feed_item.save()
-            items.append({
-            'title': title,
-            'description': description,
-            'link': link,
-            'itunes_author': itunes_author.text if itunes_author is not None else None,
-            'itunes_duration': itunes_duration.text if itunes_duration is not None else None,
-            'itunes_image': itunes_images.text if itunes_images is not None else None,
-        })
-        return items
-    except requests.RequestException as e:
-        self.retry(exc=e, countdown=min(self.countdown * 2, 60))
+    items = root.findall('channel/item')
+    items_list = []
+    for item in items:
+        title = item.find('title').text
+        description = item.find('description').text
+        itunes_author = item.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}author').text if item.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}author') is not None else None
+        itunes_duration = item.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}:duration').text if item.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}:duration') is not None else None
+        itunes_images = item.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}:image').text if item.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}:image') is not None else None
+        guid = item.find('guid').text
+        rss_feed_item = EpisodeData(
+            title=title,
+            description=description,
+            link=link,
+            itunes_author=itunes_author,
+            itunes_duration=itunes_duration,
+            guid = guid,
+            podcast=rss_feed_items[0]
+            )
+        items_list.append(rss_feed_item)
+    EpisodeData.objects.bulk_create(items_list, ignore_conflicts=True)
