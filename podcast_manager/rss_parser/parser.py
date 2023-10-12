@@ -14,16 +14,16 @@ def ParseChannel(url):
     link = root.find('channel/link').text
     language = root.find('language')
     itunes_author = root.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}author').text
-    itunes_duration = root.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}:duration').text
-    images = root.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}:image').text
-    itunes_category = root.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}:category').text
+    itunes_duration = root.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}:duration')
+    images = root.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}:image')
+    itunes_category = root.find('.//{http://www.itunes.com/dtds/podcast-1.0.dtd}:category')
     rss_link, created = RSSLink.objects.get_or_create(url=url)
 
     rss_feed_items = PodcastData.objects.get_or_create(
                 title=title,
                 description=description,
                 link=link,
-                itunes_author=itunes_author.text if itunes_author is not None else None,
+                itunes_author=itunes_author if itunes_author is not None else None,
                 itunes_duration=itunes_duration.text if itunes_duration is not None else None,
                 rss_link = rss_link,
                 )
