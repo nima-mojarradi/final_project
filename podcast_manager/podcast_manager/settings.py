@@ -32,7 +32,7 @@ SECRET_KEY = 'django-insecure-1+i812=%8zfuhoav#w=f@noi^rkxi4ddv12!3e^)hjuef%qzrw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["0.0.0.0"]
 
 rs.default_port='5000'
 
@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_celery_beat',
+    # 'django_celery_beat',
     'user',
     'rss_parser',
     'rest_framework',
@@ -157,8 +157,8 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = "user.CustomUser"
 
-CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', 'redis://redis:6379/0')
-CELERY_RESULT_BACKEND = os.environ.get('CELERY_BROKER', 'redis://redis:6379/0')
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', 'redis://redis:6379/1')
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_BROKER', 'redis://redis:6379/2')
 
 
 CELERY_BEAT_SCHEDULE = {
@@ -166,6 +166,7 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'yourapp.tasks.parse_channel_task',
         'schedule': 43200,
         'args': ('https://example.com/rss_feed_url',),
+        #should get data from database
     },
 }
 
@@ -173,9 +174,38 @@ CELERY_BEAT_SCHEDULE = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://127.0.0.1:6379/1",
+        "LOCATION": f"redis://127.0.0.1:6379",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
     }
 }
+
+CACHE_TTL = 60 * 15
+
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'celery': {
+#             'level': 'INFO',
+#             'class': 'logging.FileHandler',
+#             'filename': './log/celery_log.log',
+#             'formatter':'verbose',
+#         },
+#     },
+#     "formatters":{
+#         'verbose':{
+#             'format': "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+#             'style': '{',
+#         },
+#     },
+#     'loggers': {
+#         'celery-log': {
+#             'handlers': ['celery'],
+#             'level': 'INFO',
+#             'propagate': True,
+#         },
+#     },
+# }

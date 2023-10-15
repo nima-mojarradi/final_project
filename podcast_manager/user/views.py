@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from .serializers import UserSerializer
 from rest_framework import status
 from uuid import uuid4
+from django.conf import settings
 from django.core.cache import cache
 class RegisterUserView(APIView):
     def post(self, request):
@@ -35,7 +36,7 @@ class LoginUserView(CreateAPIView):
         jti = uuid4().hex      
         access_token = create_access_token(user.id, jti)
         refresh_token = create_refresh_token(user.id, jti)
-        cache.set(jti)
+        cache.set(jti, user.id, timeout=settings.CACHE_TTL)        
         response = Response()
         response.set_cookie(key='refresh_token',value=refresh_token, httponly=True)
         response.data = {
@@ -54,6 +55,6 @@ class UserAPIView(APIView):
 
             return Response(UserSerializer(user).data)
         else:
-            print(user)
+            return Response("user is not authenticated")
 
 
