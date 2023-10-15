@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django_celery_beat',
+    'django_celery_beat',
     'user',
     'rss_parser',
     'rest_framework',
@@ -157,24 +157,16 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = "user.CustomUser"
 
+
+CELERY_APP = 'podcast_manager.rss_parser'
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', 'redis://redis:6379/1')
 CELERY_RESULT_BACKEND = os.environ.get('CELERY_BROKER', 'redis://redis:6379/2')
-
-
-CELERY_BEAT_SCHEDULE = {
-    'parse_channel_task': {
-        'task': 'yourapp.tasks.parse_channel_task',
-        'schedule': 43200,
-        'args': ('https://example.com/rss_feed_url',),
-        #should get data from database
-    },
-}
 
 
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        "LOCATION": "redis://redis:6379/3",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
