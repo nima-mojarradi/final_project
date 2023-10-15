@@ -49,7 +49,7 @@ services:
     networks:
       - main
     ports:
-      - 6380:6380
+      - 6379:6379
     restart: always
     volumes:
       - redis_data:/data
@@ -68,6 +68,17 @@ services:
     restart: always
     volumes:
       - .:/code
+
+  celerybeat:
+    restart: always
+    build: .
+    volumes:
+      - .:/code
+    command: celery -A podcast_manager beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    networks:
+      - main
+    depends_on:
+      - celery
 
 
 
