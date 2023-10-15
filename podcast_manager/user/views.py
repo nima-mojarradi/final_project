@@ -36,7 +36,7 @@ class LoginUserView(CreateAPIView):
         jti = uuid4().hex      
         access_token = create_access_token(user.id, jti)
         refresh_token = create_refresh_token(user.id, jti)
-        cache.set(jti, user.id, timeout=settings.CACHE_TTL)        
+        cache.set(jti, user.id)
         response = Response()
         response.set_cookie(key='refresh_token',value=refresh_token, httponly=True)
         response.data = {
