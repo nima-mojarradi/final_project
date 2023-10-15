@@ -11,3 +11,11 @@ app = Celery("podcast_manager")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
 app.autodiscover_tasks()
+
+
+app.conf.beat_schedule = {
+    'podcast-parse-task': {
+        'task': 'rss_parser.tasks.parse_rss_links',
+        'schedule': crontab(hour=12, minute=0),
+    },
+}
