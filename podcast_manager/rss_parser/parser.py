@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from .models import EpisodeData, PodcastData, RSSLink
 import time
 from celery import Celery
+# from django.utils.translation import gettext_lazy as _
 
 def ParseChannel(url):
     response = requests.get(url)
