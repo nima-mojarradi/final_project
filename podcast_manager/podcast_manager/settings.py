@@ -16,6 +16,7 @@ from rest_framework.permissions import IsAuthenticated
 from dotenv import load_dotenv
 import os
 from django.core.management.commands.runserver import Command as rs
+# from django.utils.translation import gettext as _
 
 load_dotenv()
 
@@ -32,7 +33,7 @@ SECRET_KEY = 'django-insecure-1+i812=%8zfuhoav#w=f@noi^rkxi4ddv12!3e^)hjuef%qzrw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["0.0.0.0"]
+ALLOWED_HOSTS = ["0.0.0.0", "127.0.0.1"]
 
 rs.default_port='5000'
 
@@ -56,6 +57,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -158,24 +160,44 @@ REST_FRAMEWORK = {
 AUTH_USER_MODEL = "user.CustomUser"
 
 
-CELERY_APP = 'podcast_manager.rss_parser'
+import os
+from django.utils.translation import gettext_lazy as _
+
+# Celery settings
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', 'redis://redis:6379/1')
 CELERY_RESULT_BACKEND = os.environ.get('CELERY_BROKER', 'redis://redis:6379/2')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_BEAT_SCHEDULE = {
+    'update_podcasts': {
+        'task': 'rss_parser.tasks.parse_rss_links',
+        'schedule': 43200,
+    },
+}
 
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
+# Django Redis Cache settings
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://redis:6379/3",
+        "LOCATION": "redis://localhost:6379/3",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
     }
 }
-
 CACHE_TTL = 60 * 15
 
+# Other settings
+LANGUAGES = [
+    ("en", _("English")),
+    ("fa", _("Persian")),
+]
 
+# Logging settings
 # LOGGING = {
 #     'version': 1,
 #     'disable_existing_loggers': False,
@@ -183,18 +205,18 @@ CACHE_TTL = 60 * 15
 #         'celery': {
 #             'level': 'INFO',
 #             'class': 'logging.FileHandler',
-#             'filename': './log/celery_log.log',
-#             'formatter':'verbose',
+#             'filename': '/home/final_pro/podcast_manager/logs/celery.log',
+#             'formatter': 'verbose',
 #         },
 #     },
-#     "formatters":{
-#         'verbose':{
-#             'format': "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+#     'formatters': {
+#         'verbose': {
+#             'format': "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s",
 #             'style': '{',
 #         },
 #     },
 #     'loggers': {
-#         'celery-log': {
+#         'celery': {
 #             'handlers': ['celery'],
 #             'level': 'INFO',
 #             'propagate': True,
