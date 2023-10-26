@@ -8,7 +8,7 @@ from celery.schedules import crontab
 
 
 logger = get_task_logger(__name__)
-app = Celery('retry_task', broker='redis://localhost:6380')
+
 
 @shared_task(autoretry_for=(Exception,), max_retries=3, retry_backoff=True)
 def parse_rss_links():
