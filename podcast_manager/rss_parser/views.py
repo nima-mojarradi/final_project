@@ -1,11 +1,15 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .parser import ParseChannel
-from .models import LikeEpisode, LikePodcast, Comment, BookMark, Recommendation, PodcastData
-from .serializer import ChannelSerializer
+from .models import LikeEpisode, LikePodcast, Comment, BookMark, Recommendation, PodcastData, EpisodeData
+from user.models import CustomUser
+from user.authentication import Authentication
+from .serializer import LikedEpisodeSerializer
+from .serializer import ChannelSerializer, LikedEpisodeSerializer
+from rest_framework import generics
+from django.shortcuts import get_object_or_404
 
 class RequestUrl(APIView):
     def post(self, request):
@@ -17,31 +21,30 @@ class RequestUrl(APIView):
             return Response(status=status.HTTP_201_CREATED)
         
 
-class LikeView(APIView):
-    model = [LikePodcast, LikeEpisode]
-            
+class LikeView(generics.GenericAPIView):
+    # authentication_classes = [Authentication]
+    # permission_classes = [IsAuthenticated]
+    # serializer_class = LikedEpisodeSerializer
+    def get_object(self):
+        return LikeEpisode.objects.create(user=self.request.user, podcast=self.args)
 
+    def post(self, request, *args, **kwargs):
+        like = self.get_object()
+        if like:
+            like.delete()
+            return Response({"message": "Disliked successfully"}, status=status.HTTP_200_OK)
+        else:
+            serializer = self.get_serializer(data={'user': request.user.id, 'podcast': self.kwargs['user_id']})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response({"message": "Liked successfully"}, status=status.HTTP_20)
 
 class CommentView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        content = request.data.get('context')
-        return self.create_object(request, Comment, content=content)
+    pass
     
 class BookMarkView(APIView):
-    model = BookMark
+    pass
 
 
 class RecommendationRetrieveView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        recommendation = Recommendation.objects.filter(user=request.user).order_by('-count').first()
-
-        if recommendation:
-            channels = PodcastData.objects.filter(category=recommendation.category)[:5]
-            serializer = ChannelSerializer(channels, many=True, context={'request': request})
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response({"detail": "No recommendations available for this user."}, status=status.HTTP_404_NOT_FOUND)
+    pass

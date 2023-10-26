@@ -14,9 +14,3 @@ app.autodiscover_tasks()
 
 logging.getLogger("celery").addHandler(logging.FileHandler(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../logs/celery.log')))
 
-app.conf.beat_schedule = {
-    'podcast-parse-task': {
-        'task': 'rss_parser.tasks.parse_rss_links',
-        'schedule': crontab(hour=12, minute=0),
-    },
-}

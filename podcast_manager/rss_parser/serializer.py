@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import EpisodeData, LikeEpisode, PodcastData, Subscription
+from .models import EpisodeData, LikeEpisode, PodcastData, Subscription, LikePodcast
 
 class ModelParserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,8 +13,14 @@ class ModelParserSerializer(serializers.ModelSerializer):
 
 class LikedPodcastsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = LikeEpisode
+        model = LikePodcast
         fields = ('id', 'user', 'podcast')
+
+
+class LikedEpisodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LikeEpisode
+        fields = ('id', 'user', 'episode')
 
 
 
