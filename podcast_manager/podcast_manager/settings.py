@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_celery_beat',
+    # 'django_celery_beat',
     'user',
     'rss_parser',
     'rest_framework',
@@ -177,13 +177,13 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+# CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 # Django Redis Cache settings
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://localhost:6379/3",
+        "LOCATION": "redis://redis:6379/3",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
