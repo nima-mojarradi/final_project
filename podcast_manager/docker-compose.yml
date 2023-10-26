@@ -1,26 +1,26 @@
 
 services:
 
-  # rabbitmq:
-  #   container_name: rabbitmq
-  #   image: rabbitmq:3-management
-  #   networks:
-  #     - main
-  #   ports:
-  #     - 5672:5672
-  #     - 15672:15672
-  #   volumes:
-  #     - rabbitmq_data:/var/lib/rabbitmq/
-  #     - rabbitmq_log:/var/log/rabbitmq
-  #   restart: always
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    networks:
+      - main
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/
+      - rabbitmq_log:/var/log/rabbitmq
+    restart: always
 
   # postgres:
   #   container_name: postgres
   #   image: postgres:14.0
   #   environment:
-  #     POSTGRES_USER: ${USER}
-  #     POSTGRES_PASSWORD: ${PASSWORD}
-  #     POSTGRES_DB: ${NAME}
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: 3858nima
+  #     POSTGRES_DB: final_pro
   #   networks:
   #     - main
   #   ports:
@@ -48,9 +48,6 @@ services:
     image: redis:7.2
     networks:
       - main
-    ports:
-      - 6380:6380
-    restart: always
     volumes:
       - redis_data:/data
 
@@ -74,11 +71,37 @@ services:
     build: .
     volumes:
       - .:/code
-    command: celery -A podcast_manager beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    command: celery -A podcast_manager beat -l INFO
     networks:
       - main
     depends_on:
       - celery
+
+  login_consumer:
+    container_name: login_consumer
+    command: python3 manage.py login_listener
+    build: .
+    restart: always
+    networks:
+      - main
+    volumes:
+      - .:/code
+    depends_on:
+      - rabbitmq
+      - app
+
+  register_consumer:
+    container_name: register_consumer
+    command: python3 manage.py register_listener
+    build: .
+    restart: always
+    networks:
+      - main
+    volumes:
+      - .:/code
+    depends_on:
+      - rabbitmq
+      - app
 
 
 
@@ -86,9 +109,8 @@ networks:
   main:
 
 volumes:
-  # postgres_data:
+  postgres_data:
   redis_data:
-  # flower_data:
-  # rabbitmq_data:
-  # rabbitmq_log:
+  rabbitmq_data:
+  rabbitmq_log:
 
