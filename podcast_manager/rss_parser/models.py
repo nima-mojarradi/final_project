@@ -1,7 +1,9 @@
 from django.db import models
 from user.models import CustomUser
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.auth.models import User
+
+
 
 class RSSLink(models.Model):
     url = models.URLField(unique=True)
@@ -39,8 +41,10 @@ class EpisodeData(models.Model):
 
 
 class LikeEpisode(models.Model):
-    user1 = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='user')
-    title = models.ForeignKey(EpisodeData, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    episode = models.ForeignKey('EpisodeData', on_delete=models.CASCADE)
+    class Meta:
+        unique_together = ('user', 'episode')
 
 class LikePodcast(models.Model):
     user2 = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
