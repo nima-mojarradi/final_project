@@ -76,11 +76,10 @@ class Subscription(models.Model):
 
 class BookMark(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='bookmarks')
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     episode = models.ForeignKey(EpisodeData, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.user} bookmarked {self.content_object}'
+        return f'{self.user} bookmarked {self.episode}'
     
 
 class Recommendation(models.Model):
