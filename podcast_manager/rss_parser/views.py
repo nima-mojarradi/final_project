@@ -10,14 +10,17 @@ from .serializer import LikedEpisodeSerializer
 from .serializer import ChannelSerializer, LikedEpisodeSerializer
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
+from user.publisher import publisher
 
 class RequestUrl(APIView):
     def post(self, request):
         url = request.data.get('url')
         if url is None:
+            publisher('update_invalid_podcast', "the url you requested is invalid")
             return Response("no valid link")
         else:
             ParseChannel(url=url)
+            publisher('update_valid_podcast', 'all episodes of the requested podcasts updated for you')
             return Response(status=status.HTTP_201_CREATED)
         
 
@@ -37,13 +40,15 @@ class LikeView(generics.GenericAPIView):
             serializer = self.get_serializer(data={'user': request.user.id, 'podcast': self.kwargs['user_id']})
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response({"message": "Liked successfully"}, status=status.HTTP_20)
+            return Response({"message": "Liked successfully"}, status=status.HTTP_200_OK)
 
 class CommentView(APIView):
     pass
     
 class BookMarkView(APIView):
-    pass
+    def post(self, request):
+        bookmark = BookMark.objects.create(user=self.request.user, episode=self.args)
+        return bookmark
 
 
 class RecommendationRetrieveView(APIView):
