@@ -90,6 +90,19 @@ services:
       - rabbitmq
       - app
 
+  update_invalid_podcast_consumer:
+    container_name: update_invalid_podcast_consumer
+    command: python3 manage.py update_invalid_podcast_listener
+    build: .
+    restart: always
+    networks:
+      - main
+    volumes:
+      - .:/code
+    depends_on:
+      - rabbitmq
+      - app
+
   register_consumer:
     container_name: register_consumer
     command: python3 manage.py register_listener
@@ -103,6 +116,18 @@ services:
       - rabbitmq
       - app
 
+  update_valid_podcast_consumer:
+    container_name: update_valid_podcast_consumer
+    command: python3 manage.py update_valid_podcast_listener
+    build: .
+    restart: always
+    networks:
+      - main
+    volumes:
+      - .:/code
+    depends_on:
+      - rabbitmq
+      - app
 
 
 networks:
