@@ -15,6 +15,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from dotenv import load_dotenv
 import os
+import logging.config
 from django.core.management.commands.runserver import Command as rs
 # from django.utils.translation import gettext as _
 
@@ -197,29 +198,53 @@ LANGUAGES = [
     ("fa", _("Persian")),
 ]
 
-# Logging settings
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'celery': {
-#             'level': 'INFO',
-#             'class': 'logging.FileHandler',
-#             'filename': '/home/final_pro/podcast_manager/logs/celery.log',
-#             'formatter': 'verbose',
-#         },
-#     },
-#     'formatters': {
-#         'verbose': {
-#             'format': "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s",
-#             'style': '{',
-#         },
-#     },
-#     'loggers': {
-#         'celery': {
-#             'handlers': ['celery'],
-#             'level': 'INFO',
-#             'propagate': True,
-#         },
-#     },
-# }
+LOGGING_CONFIG = None 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "()": "colorlog.ColoredFormatter",
+            "format": "%(log_color)s %(levelname)-8s %(asctime)s %(request_id)s  %(process)s --- "
+            "%(lineno)-8s [%(name)s] %(funcName)-24s : %(message)s",
+            "log_colors": {
+                "DEBUG": "blue",
+                "INFO": "white",
+                "WARNING": "yellow",
+                "ERROR": "red",
+                "CRITICAL": "bold_red",
+            },
+        },
+        "aws": {
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+    },
+    "filters": {
+        "request_id": {"()": "log_request_id.filters.RequestIDFilter"},
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+            "filters": ["request_id"],
+        },
+    },
+    "loggers": {
+        # Default logger for any logger name
+        "": {
+            "level": "INFO",
+            "handlers": ["console", ],
+            "propagate": False,
+        },
+        # Logger for django server logs with django.server logger name
+        "django.server": {
+            "level": "DEBUG",
+            "handlers": ["console", ],
+            "propagate": False,
+        },
+        # Logger for 3rd party library to restrict unnecessary log statments by the library
+        "azure": {"level": "ERROR", "handlers": ["console"], "propogate": False},
+    },
+}
+logging.config.dictConfig(LOGGING)
