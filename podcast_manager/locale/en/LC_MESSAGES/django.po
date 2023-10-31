@@ -1,0 +1,167 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-31 16:46+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: podcast_manager/settings.py:198
+msgid "English"
+msgstr ""
+
+#: podcast_manager/settings.py:199
+msgid "Persian"
+msgstr ""
+
+#: rss_parser/serializer.py:9
+msgid "link"
+msgstr ""
+
+#: rss_parser/serializer.py:9 rss_parser/serializer.py:35
+msgid "description"
+msgstr ""
+
+#: rss_parser/serializer.py:9 rss_parser/serializer.py:35
+msgid "title"
+msgstr ""
+
+#: rss_parser/serializer.py:19 rss_parser/serializer.py:25
+msgid "user"
+msgstr ""
+
+#: rss_parser/serializer.py:19
+msgid "podcast"
+msgstr ""
+
+#: rss_parser/serializer.py:25
+msgid "episode"
+msgstr ""
+
+#: rss_parser/serializer.py:35
+msgid "id"
+msgstr ""
+
+#: rss_parser/serializer.py:35
+msgid "subscribed"
+msgstr ""
+
+#: rss_parser/serializer.py:35
+msgid "last_update"
+msgstr ""
+
+#: rss_parser/serializer.py:35
+msgid "language"
+msgstr ""
+
+#: rss_parser/serializer.py:35
+msgid "subtitle"
+msgstr ""
+
+#: rss_parser/serializer.py:36
+msgid "image"
+msgstr ""
+
+#: rss_parser/serializer.py:36
+msgid "author"
+msgstr ""
+
+#: rss_parser/serializer.py:36
+msgid "xml_link"
+msgstr ""
+
+#: rss_parser/serializer.py:36
+msgid "category"
+msgstr ""
+
+#: rss_parser/serializer.py:36
+msgid "owner"
+msgstr ""
+
+#: rss_parser/views.py:20
+msgid "update_invalid_podcast"
+msgstr ""
+
+#: rss_parser/views.py:20
+msgid "the url you requested is invalid"
+msgstr ""
+
+#: rss_parser/views.py:24
+msgid "update_valid_podcast"
+msgstr ""
+
+#: rss_parser/views.py:24
+msgid "all episodes of the requested podcasts updated for you"
+msgstr ""
+
+#: rss_parser/views.py:39 rss_parser/views.py:44
+msgid "message"
+msgstr ""
+
+#: rss_parser/views.py:39
+msgid "Disliked successfully"
+msgstr ""
+
+#: rss_parser/views.py:44
+msgid "Liked successfully"
+msgstr ""
+
+#: user/authentication.py:52
+msgid "Access token not provided"
+msgstr ""
+
+#: user/authentication.py:56
+msgid "invalid access token"
+msgstr ""
+
+#: user/authentication.py:60
+msgid "user not found"
+msgstr ""
+
+#: user/authentication.py:73
+msgid "token not found"
+msgstr ""
+
+#: user/authentication.py:77
+msgid "user_id not in token"
+msgstr ""
+
+#: user/serializers.py:9
+msgid "username"
+msgstr ""
+
+#: user/serializers.py:9
+msgid "email"
+msgstr ""
+
+#: user/serializers.py:9
+msgid "phone_number"
+msgstr ""
+
+#: user/serializers.py:9
+msgid "password"
+msgstr ""
+
+#: user/views.py:34
+msgid "invalid credential"
+msgstr ""
+
+#: user/views.py:37
+msgid "invalid credential!"
+msgstr ""
+
+#: user/views.py:63
+msgid "user is not authenticated"
+msgstr ""

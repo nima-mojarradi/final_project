@@ -15,12 +15,13 @@ from uuid import uuid4
 from django.conf import settings
 from django.core.cache import cache
 from .publisher import publisher
+from django.utils.translation import gettext_lazy as _
 class RegisterUserView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            publisher('register', 'user registered')
+            # publisher('register', 'user registered')
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -30,21 +31,21 @@ class LoginUserView(CreateAPIView):
     def post(self,request):
         user = CustomUser.objects.filter(username=request.data['username']).first()
         if not user:
-            raise APIException('invalid credential')
+            raise APIException(_('invalid credential'))
         
         if not user.check_password(request.data['password']):
-            raise APIException('invalid credential!')  
+            raise APIException(_('invalid credential!'))  
 
         jti = uuid4().hex      
-        access_token = Authentication.create_access_token(user.id, jti)
-        refresh_token = Authentication.create_refresh_token(user.id, jti)
-        cache.set(jti, user.id)
+        access_token = Authentication().create_access_token(user.id, jti)
+        refresh_token = Authentication().create_refresh_token(user.id, jti)
+        cache.set(jti, refresh_token)
         response = Response()
         response.set_cookie(key='refresh_token',value=refresh_token, httponly=True)
         response.data = {
             'access_token':access_token
         }
-        publisher('login', 'user logged in')
+        # publisher('login', 'user logged in')
         return response
     
     
@@ -59,6 +60,6 @@ class UserAPIView(APIView):
 
             return Response(UserSerializer(user).data)
         else:
-            return Response("user is not authenticated")
+            return Response(_("user is not authenticated"))
 
 

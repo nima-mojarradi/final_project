@@ -11,36 +11,37 @@ from .serializer import ChannelSerializer, LikedEpisodeSerializer
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
 from user.publisher import publisher
+from django.utils.translation import gettext_lazy as _
 
 class RequestUrl(APIView):
     def post(self, request):
         url = request.data.get('url')
         if url is None:
-            publisher('update_invalid_podcast', "the url you requested is invalid")
+            publisher(_('update_invalid_podcast'), _("the url you requested is invalid"))
             return Response("no valid link")
         else:
             ParseChannel(url=url)
-            publisher('update_valid_podcast', 'all episodes of the requested podcasts updated for you')
+            publisher(_('update_valid_podcast'), _('all episodes of the requested podcasts updated for you'))
             return Response(status=status.HTTP_201_CREATED)
         
 
-class LikeView(generics.GenericAPIView):
-    # authentication_classes = [Authentication]
-    # permission_classes = [IsAuthenticated]
-    # serializer_class = LikedEpisodeSerializer
-    def get_object(self):
-        return LikeEpisode.objects.create(user=self.request.user, podcast=self.args)
-
+class LikeView(APIView):
+    authentication_classes = [Authentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = LikedEpisodeSerializer
     def post(self, request, *args, **kwargs):
-        like = self.get_object()
+        print(request.user)
+        print("*"*100)
+        # episode = get_object_or_404(EpisodeData, id=request.data.get('episode'))
+        like = LikeEpisode.objects.filter(user=request.user, episode_id=request.data.get('episode'))
         if like:
-            like.delete()
-            return Response({"message": "Disliked successfully"}, status=status.HTTP_200_OK)
+            like.get().delete()
+            return Response({_("message"): _("Disliked successfully")}, status=status.HTTP_200_OK)
         else:
-            serializer = self.get_serializer(data={'user': request.user.id, 'podcast': self.kwargs['user_id']})
+            serializer = self.serializer_class(data={'user': request.user.id, 'episode': request.data.get('episode')})
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response({"message": "Liked successfully"}, status=status.HTTP_200_OK)
+            return Response({_("message"): _("Liked successfully")}, status=status.HTTP_200_OK)
 
 class CommentView(APIView):
     pass
