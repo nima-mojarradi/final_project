@@ -15,13 +15,16 @@ from uuid import uuid4
 from django.conf import settings
 from django.core.cache import cache
 from .publisher import publisher
+from rss_parser.models import Notification
 from django.utils.translation import gettext_lazy as _
 class RegisterUserView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            # publisher('register', 'user registered')
+            Notification.objects.create(notif_type='register', message='user registered')
+            publisher('register', 'user registered')
+            print(type(publisher))
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -45,7 +48,8 @@ class LoginUserView(CreateAPIView):
         response.data = {
             'access_token':access_token
         }
-        # publisher('login', 'user logged in')
+        Notification.objects.create(user=user, notif_type='login', message=f'user with user id {user} logged in')
+        publisher('login', 'user logged in')
         return response
     
     
