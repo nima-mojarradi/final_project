@@ -96,13 +96,10 @@ class Recommendation(models.Model):
 
 
 class Notification(models.Model):
-    title = models.CharField(max_length=255)
-    notification_type = models.CharField(max_length=50)
-    recipients = models.ManyToManyField(CustomUser, blank=True, related_name='notifications')
+    notif_type = models.CharField(max_length=100)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    date_read = models.DateTimeField(null=True, blank=True)
-    is_read = models.BooleanField(default=False)
 
     def __str__(self):
         return f'Notification: {self.title}'
