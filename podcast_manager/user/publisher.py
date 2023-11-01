@@ -7,7 +7,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 # credintial = pika.PlainCredentials(username='guest', password='guest')
 
 def publisher(queue, body):
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
+    connection = pika.BlockingConnection(pika.URLParameters('amqp://guest:guest@rabbitmq:5672'))
     channel = connection.channel()
 
     channel.queue_declare(queue=queue)
