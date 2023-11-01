@@ -17,11 +17,11 @@ class RequestUrl(APIView):
     def post(self, request):
         url = request.data.get('url')
         if url is None:
-            publisher(_('update_invalid_podcast'), _("the url you requested is invalid"))
+            publisher('update_invalid_podcast', "the url you requested is invalid")
             return Response("no valid link")
         else:
             ParseChannel(url=url)
-            publisher(_('update_valid_podcast'), _('all episodes of the requested podcasts updated for you'))
+            publisher('update_valid_podcast', 'all episodes of the requested podcasts updated for you')
             return Response(status=status.HTTP_201_CREATED)
         
 
