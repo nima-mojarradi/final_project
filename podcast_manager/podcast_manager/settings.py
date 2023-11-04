@@ -18,7 +18,7 @@ import os
 import logging.config
 from django.core.management.commands.runserver import Command as rs
 from django.utils.translation import gettext as _
-import gettext
+from elasticsearch import Elasticsearch
 
 load_dotenv()
 
@@ -67,7 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'drf_api_logger.middleware.api_logger_middleware.APILoggerMiddleware'
+    'rss_parser.middleware.LoggingMiddleware',
 ]
 
 ROOT_URLCONF = 'podcast_manager.urls'
@@ -198,12 +198,7 @@ CACHE_TTL = 60 * 15
 
 
 
-ELASTICSEARCH_DSL={
-    'default':{
-        'hosts':'http://localhost:9200'
-    },
-}
-
+LOCALE_PATHS = (os.path.join(BASE_DIR,'locale/'),)
 
 # Other settings
 LANGUAGES = [
@@ -212,27 +207,28 @@ LANGUAGES = [
 ]
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'logs/request.log',
-            'maxBytes': 10485760,  # 10 MB
-            'backupCount': 5,
-            'encoding': 'utf-8',
-            'formatter': 'verbose'
+    "version": 1,
+    "disable_existing_loggers": False,
+
+    "handlers": {
+        "elastic_handlers": {
+            "level": "INFO",
+            "class": "rss_parser.handler.ElasticHandler",
         },
     },
-    'formatters': {
-        'verbose': {
-            'format': '%(asctime)s [%(levelname)s] %(message)s (%(filename)s:%(lineno)s)',
+
+    "loggers": {
+        "elastic-logger": {
+            "handlers": ["elastic_handlers"],
+            "level": "INFO",
+            'propagate': True
         },
     },
-    'loggers': {
-        'django.request': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-        },
+}
+
+
+ELASTICSEARCH_DSL={
+    'default':{
+        'hosts':'http://elastic:9200'
     },
 }

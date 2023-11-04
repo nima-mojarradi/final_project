@@ -3,20 +3,19 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .parser import ParseChannel
-from .models import LikeEpisode, LikePodcast, Comment, BookMark, Recommendation, PodcastData, EpisodeData, Notification
+from .models import LikeEpisode, LikePodcast, Comment, BookMark, Recommendation, PodcastData, EpisodeData, Notification, Subscription
 from user.models import CustomUser
 from user.authentication import Authentication
 from .serializer import LikedEpisodeSerializer
-from .serializer import ChannelSerializer, LikedEpisodeSerializer
+from .serializer import ChannelSerializer, LikedEpisodeSerializer, CommentSerializer, SubscribeSerializer
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
 from user.publisher import publisher
 from django.utils.translation import gettext_lazy as _
-from config.mixins import LoggingMixin
 from user.authentication import Authentication
 import logging
 
-class RequestUrl(LoggingMixin,APIView):
+class RequestUrl(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [Authentication]
     def post(self, request):
@@ -33,7 +32,7 @@ class RequestUrl(LoggingMixin,APIView):
             return Response(status=status.HTTP_201_CREATED)
         
 
-class LikeView(LoggingMixin,APIView):
+class LikeView(APIView):
     authentication_classes = [Authentication]
     permission_classes = [IsAuthenticated]
     serializer_class = LikedEpisodeSerializer
@@ -57,26 +56,78 @@ class LikeView(LoggingMixin,APIView):
         try:
             like = LikeEpisode.objects.get(user=request.user, episode=episode)
             like.delete()
-            msg = {'status': _('Unliked!')}
+            msg = {'status': 'Unliked!'}
             return Response(msg, status=status.HTTP_204_NO_CONTENT)
         except LikeEpisode.DoesNotExist:
-            msg = {'status': _('This episode is not liked!')}
+            msg = {'status':'This episode is not liked!'}
             return Response(msg, status=status.HTTP_404_NOT_FOUND)
 
-class CommentView(LoggingMixin,APIView):
-    def post(self, request):
-        user = request.user
-        context = request.context
-        podcast = request.podcast
-        comment=Comment.objects.create(user=user, context=context, podcast=podcast)
-        return comment
+class CommentView(APIView):
+    authentication_classes = [Authentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = CommentSerializer
+
+    def post(self, request, podcast_id):
+        podcast = EpisodeData.objects.get(id=podcast_id)
+        comment = Comment.objects.create(user=request.user, podcast=podcast, context=request.data['context'])
+
+        if comment:
+            serializer = self.serializer_class(comment)
+            massage = {'status': 'Comment added successfuly'}
+            return Response(massage, status=status.HTTP_201_CREATED)
+        else:
+            msg = {'status': _('Unable to add comment!')}
+            return Response(msg, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, comment_id):
+        try:
+            comment = Comment.objects.get(id=comment_id, user=request.user)
+            comment.delete()
+            msg = {'status': 'Comment deleted!'}
+            return Response(msg, status=status.HTTP_204_NO_CONTENT)
+        except Comment.DoesNotExist:
+            msg = {'status': 'This comment does not exist or does not belong to the user!'}
+            return Response(msg, status=status.HTTP_404_NOT_FOUND)
+
 
     
-class BookMarkView(LoggingMixin,APIView):
-    def post(self, request):
-        bookmark = BookMark.objects.create(user=request.user, episode=request.args)
-        return bookmark
+class BookMarkView(APIView):
+    authentication_classes = [Authentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = CommentSerializer
+    def post(self, request, episode_id):
+        try:
+            episode = EpisodeData.objects.get(id=episode_id)
+            bookmark = BookMark.objects.create(user=request.user, episode=episode)
+            return Response(f'the episode with id {episode_id} bookmarked')
+        except Exception as e:
+            return Response('the episode that you want to bookmark is already in bookmarks')
+    def delete(self, request, episode_id):
+        try:
+            episode=BookMark.objects.get(episode_id=episode_id)
+            episode.delete()
+            return Response('the episode you wanted deleted from the bookmarks')
+        except Exception as e:
+            return Response('something went wrong in your request')
 
+class SubscribeView(APIView):
+    authentication_classes = [Authentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = SubscribeSerializer
+    def post(self, request, channel_id):
+        try:
+            channel = PodcastData.objects.get(id=channel_id)
+            subscription = Subscription.objects.create(user=request.user, channel=channel)
+            return Response(f'the channel with id {channel_id} subscribed')
+        except Exception as e:
+            return Response('the episode that you want to bookmark is already in bookmarks')
+    def delete(self, request, channel_id):
+        try:
+            channel=Subscription.objects.get(channel_id=channel_id)
+            channel.delete()
+            return Response(f'you unfollowed the channel with channel id {channel_id}')
+        except Exception as e:
+            return Response('something went wrong in your request')
 
-class RecommendationRetrieveView(LoggingMixin,APIView):
+class RecommendationRetrieveView(APIView):
     pass
