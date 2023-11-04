@@ -17,7 +17,8 @@ from django.core.cache import cache
 from .publisher import publisher
 from rss_parser.models import Notification
 from django.utils.translation import gettext_lazy as _
-class RegisterUserView(APIView):
+from podcast_manager.mixins import LoggingMixin
+class RegisterUserView(LoggingMixin,APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
@@ -29,7 +30,7 @@ class RegisterUserView(APIView):
         else:
            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-class LoginUserView(CreateAPIView):
+class LoginUserView(LoggingMixin,CreateAPIView):
     serializer_class = UserSerializer
     def post(self,request):
         user = CustomUser.objects.filter(username=request.data['username']).first()
@@ -48,12 +49,12 @@ class LoginUserView(CreateAPIView):
         response.data = {
             'access_token':access_token
         }
-        Notification.objects.create(user=user, notif_type='login', message=f'user with user id {user} logged in')
+        Notification.objects.create(user=user, notif_type='login', message=f'user with user id {CustomUser.objects.filter(username=request.data["username"]).first()} logged in')
         publisher('login', 'user logged in')
         return response
     
     
-class UserAPIView(APIView):
+class UserAPIView(LoggingMixin,APIView):
     def get(self,request):
         auth = get_authorization_header(request).split()
         if auth and len(auth) == 2:
