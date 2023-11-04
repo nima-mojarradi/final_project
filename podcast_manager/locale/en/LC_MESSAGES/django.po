@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-31 16:46+0000\n"
+"POT-Creation-Date: 2023-11-04 17:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: podcast_manager/settings.py:198
+#: podcast_manager/settings.py:211
 msgid "English"
 msgstr ""
 
-#: podcast_manager/settings.py:199
+#: podcast_manager/settings.py:212
 msgid "Persian"
 msgstr ""
 
@@ -30,92 +30,73 @@ msgstr ""
 msgid "link"
 msgstr ""
 
-#: rss_parser/serializer.py:9 rss_parser/serializer.py:35
+#: rss_parser/serializer.py:9 rss_parser/serializer.py:51
 msgid "description"
 msgstr ""
 
-#: rss_parser/serializer.py:9 rss_parser/serializer.py:35
+#: rss_parser/serializer.py:9 rss_parser/serializer.py:51
 msgid "title"
 msgstr ""
 
-#: rss_parser/serializer.py:19 rss_parser/serializer.py:25
+#: rss_parser/serializer.py:21 rss_parser/serializer.py:29
+#: rss_parser/serializer.py:37 rss_parser/serializer.py:44
 msgid "user"
 msgstr ""
 
-#: rss_parser/serializer.py:19
+#: rss_parser/serializer.py:21 rss_parser/serializer.py:44
 msgid "podcast"
 msgstr ""
 
-#: rss_parser/serializer.py:25
+#: rss_parser/serializer.py:29 rss_parser/serializer.py:37
 msgid "episode"
 msgstr ""
 
-#: rss_parser/serializer.py:35
+#: rss_parser/serializer.py:51
 msgid "id"
 msgstr ""
 
-#: rss_parser/serializer.py:35
+#: rss_parser/serializer.py:51
 msgid "subscribed"
 msgstr ""
 
-#: rss_parser/serializer.py:35
+#: rss_parser/serializer.py:51
 msgid "last_update"
 msgstr ""
 
-#: rss_parser/serializer.py:35
+#: rss_parser/serializer.py:51
 msgid "language"
 msgstr ""
 
-#: rss_parser/serializer.py:35
+#: rss_parser/serializer.py:51
 msgid "subtitle"
 msgstr ""
 
-#: rss_parser/serializer.py:36
+#: rss_parser/serializer.py:52
 msgid "image"
 msgstr ""
 
-#: rss_parser/serializer.py:36
+#: rss_parser/serializer.py:52
 msgid "author"
 msgstr ""
 
-#: rss_parser/serializer.py:36
+#: rss_parser/serializer.py:52
 msgid "xml_link"
 msgstr ""
 
-#: rss_parser/serializer.py:36
+#: rss_parser/serializer.py:52
 msgid "category"
 msgstr ""
 
-#: rss_parser/serializer.py:36
+#: rss_parser/serializer.py:52
 msgid "owner"
 msgstr ""
 
-#: rss_parser/views.py:20
-msgid "update_invalid_podcast"
+#: rss_parser/views.py:50
+msgid "This episode is already liked!"
 msgstr ""
 
-#: rss_parser/views.py:20
-msgid "the url you requested is invalid"
-msgstr ""
-
-#: rss_parser/views.py:24
-msgid "update_valid_podcast"
-msgstr ""
-
-#: rss_parser/views.py:24
-msgid "all episodes of the requested podcasts updated for you"
-msgstr ""
-
-#: rss_parser/views.py:39 rss_parser/views.py:44
-msgid "message"
-msgstr ""
-
-#: rss_parser/views.py:39
-msgid "Disliked successfully"
-msgstr ""
-
-#: rss_parser/views.py:44
-msgid "Liked successfully"
+#: rss_parser/views.py:79
+msgid "Unable to add comment!"
 msgstr ""
 
 #: user/authentication.py:52
@@ -138,30 +119,14 @@ msgstr ""
 msgid "user_id not in token"
 msgstr ""
 
-#: user/serializers.py:9
-msgid "username"
-msgstr ""
-
-#: user/serializers.py:9
-msgid "email"
-msgstr ""
-
-#: user/serializers.py:9
-msgid "phone_number"
-msgstr ""
-
-#: user/serializers.py:9
-msgid "password"
-msgstr ""
-
-#: user/views.py:34
+#: user/views.py:37
 msgid "invalid credential"
 msgstr ""
 
-#: user/views.py:37
+#: user/views.py:40
 msgid "invalid credential!"
 msgstr ""
 
-#: user/views.py:63
+#: user/views.py:67
 msgid "user is not authenticated"
 msgstr ""

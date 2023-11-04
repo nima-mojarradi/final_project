@@ -3,7 +3,7 @@ import time
 import os
 # from podcast_manager.settings import ALLOWED_HOSTS
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'podcast_manager.settings')
 # credintial = pika.PlainCredentials(username='guest', password='guest')
 
 def publisher(queue, body):

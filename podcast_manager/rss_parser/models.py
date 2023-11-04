@@ -78,6 +78,9 @@ class BookMark(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='bookmarks')
     episode = models.ForeignKey(EpisodeData, on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = [['user', 'episode']]
+
     def __str__(self):
         return f'{self.user} bookmarked {self.episode}'
     
