@@ -17,7 +17,7 @@ from django.core.cache import cache
 from .publisher import publisher
 from rss_parser.models import Notification
 from django.utils.translation import gettext_lazy as _
-from podcast_manager.mixins import LoggingMixin
+from config.mixins import LoggingMixin
 class RegisterUserView(LoggingMixin,APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
