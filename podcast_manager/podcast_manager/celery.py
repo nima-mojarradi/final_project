@@ -22,5 +22,5 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 
 # app.autodiscover_tasks()
 
-logging.getLogger("celery").addHandler(logging.FileHandler(os.path.join(os.path.dirname(os.path.abspath(__file__)), '../logs/celery.log')))
+
 

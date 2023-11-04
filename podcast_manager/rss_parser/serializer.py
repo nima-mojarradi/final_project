@@ -14,12 +14,16 @@ class ModelParserSerializer(serializers.ModelSerializer):
 
 
 class LikedPodcastsSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    episode = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = LikePodcast
         fields = (_('user'), _('podcast'))
 
 
 class LikedEpisodeSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    episode = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = LikeEpisode
         fields = (_('user'), _('episode'))
