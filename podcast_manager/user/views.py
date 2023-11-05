@@ -23,8 +23,7 @@ class RegisterUserView(APIView):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            Notification.objects.create(notif_type='register', message='user registered')
-            publisher('register', 'user registered')
+            publisher('register',{'user_id':request.user.id, 'massage':'user registered'})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -48,8 +47,7 @@ class LoginUserView(CreateAPIView):
         response.data = {
             'access_token':access_token
         }
-        Notification.objects.create(user=user, notif_type='login', message=f'user with user id {CustomUser.objects.filter(username=request.data["username"]).first()} logged in')
-        publisher('login', 'user logged in')
+        publisher('login',{'user_id':user.id, 'massage':'user logged in'})
         return response
     
 
