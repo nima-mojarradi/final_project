@@ -1,7 +1,7 @@
 from django.views.decorators.csrf import csrf_protect
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-from rest_framework.generics import CreateAPIView, DestroyAPIView
+from rest_framework.generics import CreateAPIView
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.authentication import SessionAuthentication,BasicAuthentication
 from .authentication import Authentication
@@ -9,7 +9,7 @@ from rest_framework.exceptions import APIException
 from .models import CustomUser
 from rest_framework.authentication import get_authorization_header
 from rest_framework.response import Response
-from .serializers import UserSerializer
+from .serializers import UserSerializer, LoginUserSerializer
 from rest_framework import status
 from uuid import uuid4
 from django.conf import settings
@@ -30,7 +30,7 @@ class RegisterUserView(APIView):
            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 class LoginUserView(CreateAPIView):
-    serializer_class = UserSerializer
+    serializer_class = LoginUserSerializer
     def post(self,request):
         user = CustomUser.objects.filter(username=request.data['username']).first()
         if not user:
