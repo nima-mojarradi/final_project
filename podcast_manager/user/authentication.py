@@ -13,7 +13,7 @@ class Authentication(authentication.BaseAuthentication):
         return jwt.encode({
             'jti':jti,
             'user_id':id,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=12),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=15),
             'iat': datetime.datetime.utcnow()
         }, 'access_secret', algorithm='HS256')
 
@@ -32,7 +32,7 @@ class Authentication(authentication.BaseAuthentication):
         return jwt.encode({
             'jti':jti,
             'user_id':id,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=2),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=10),
             'iat': datetime.datetime.utcnow()
         }, 'refresh_secret', algorithm='HS256')
 
