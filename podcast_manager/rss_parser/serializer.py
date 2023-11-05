@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import EpisodeData, LikeEpisode, PodcastData, Subscription, LikePodcast, Comment
+from .models import EpisodeData, LikeEpisode, PodcastData, Subscription, LikePodcast, Comment, BookMark
 from django.utils.translation import gettext_lazy as _
 
 
@@ -21,6 +21,14 @@ class LikedPodcastsSerializer(serializers.ModelSerializer):
         fields = (_('user'), _('podcast'))
 
 
+class CommentSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    episode = serializers.PrimaryKeyRelatedField(read_only=True)
+    class Meta:
+        model = Comment
+        fields = ('user', 'episode')
+
+
 class LikedEpisodeSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True)
     episode = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -29,11 +37,11 @@ class LikedEpisodeSerializer(serializers.ModelSerializer):
         fields = (_('user'), _('episode'))
 
 
-class CommentSerializer(serializers.ModelSerializer):
+class BookMarkSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True)
     episode = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
-        model = Comment
+        model = BookMark
         fields = (_('user'), _('episode'))
 
 class SubscribeSerializer(serializers.ModelSerializer):
