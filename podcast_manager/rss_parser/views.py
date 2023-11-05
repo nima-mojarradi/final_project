@@ -7,12 +7,13 @@ from .models import LikeEpisode, LikePodcast, Comment, BookMark, Recommendation,
 from user.models import CustomUser
 from user.authentication import Authentication
 from .serializer import LikedEpisodeSerializer
-from .serializer import ChannelSerializer, LikedEpisodeSerializer, CommentSerializer, SubscribeSerializer
+from .serializer import ChannelSerializer, LikedEpisodeSerializer, CommentSerializer, SubscribeSerializer, BookMarkSerializer
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
 from user.publisher import publisher
 from django.utils.translation import gettext_lazy as _
 from user.authentication import Authentication
+from .tasks import parse_rss_links
 import json
 import logging
 
@@ -22,14 +23,13 @@ class RequestUrl(APIView):
     def post(self, request):
         url = request.data.get('url')
         user = request.user
-        if url is None:
-            publisher('update_invalid_podcast', "the url you requested is invalid")
-            Notification.objects.create(user=request.user, notif_type='request_to_url', message='the url you requested was invalid')
-            return Response("no valid link")
+        if not url:
+            parse_rss_links.delay()
+            publisher('update_invalid_podcast',{'user_id':request.user.id, 'massage':'podcast you wanted updated'})
+            return Response("all links updated")
         else:
             ParseChannel(url=url)
-            publisher('update_valid_podcast', 'all episodes of the requested podcasts updated for you')
-            Notification.objects.create(user=request.user, notif_type='request_to_url', message='the url you requested was valid')
+            publisher('update_valid_podcast' ,{'user_id':request.user.id, 'massage':'all episodes of the requested podcasts updated for you'})
             return Response(status=status.HTTP_201_CREATED)
         
 
@@ -43,25 +43,19 @@ class LikeView(APIView):
     authentication_classes = [Authentication]
     permission_classes = [IsAuthenticated]
     serializer_class = LikedEpisodeSerializer
-    # logger = logging.getLogger(__name__)
-
-    def get(self,request):
-        podcasts = LikeEpisode.objects.all().values()
-        return Response(json.dumps(list(podcasts)))
 
     def post(self, request, episode_id):
         episode = EpisodeData.objects.get(id=episode_id)
-        like = LikeEpisode.objects.get_or_create(user=request.user, episode=episode)
-
-        if like:
-            serializer = self.serializer_class(like)
-            massage = {'status':'episode liked successfuly'}
-            return Response(massage, status=status.HTTP_201_CREATED)
-        else:
+        try:
+            like = LikeEpisode.objects.get(user=request.user, episode=episode)
             msg = {'status': _('This episode is already liked!')}
             return Response(msg, status=status.HTTP_200_OK)
-        
-    
+        except LikeEpisode.DoesNotExist:
+            like = LikeEpisode.objects.create(user=request.user, episode=episode)
+            serializer = self.serializer_class(like)
+            msg = {'status':'episode liked successfuly'}
+            return Response(msg, status=status.HTTP_201_CREATED)
+
     def delete(self, request, episode_id):
         episode = EpisodeData.objects.get(id=episode_id)
         try:
@@ -100,12 +94,26 @@ class CommentView(APIView):
             msg = {'status': 'This comment does not exist or does not belong to the user!'}
             return Response(msg, status=status.HTTP_404_NOT_FOUND)
 
-
-    
-class BookMarkView(APIView):
+class AllCommentsOnEpisode(APIView):
     authentication_classes = [Authentication]
     permission_classes = [IsAuthenticated]
     serializer_class = CommentSerializer
+    def post(self, request, episode_id):
+        comments = Comment.objects.filter(podcast_id = episode_id).values()
+        all_comments = list(comments)
+        return Response(all_comments)
+
+class CountOfLikes(APIView):
+    authentication_classes = [Authentication]
+    permission_classes = [IsAuthenticated]
+    def post(self,request, episode_id):
+        like_count = LikeEpisode.objects.filter(episode_id=episode_id).count()
+        return Response({'count_of_likes':like_count})
+            
+class BookMarkView(APIView):
+    authentication_classes = [Authentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = BookMarkSerializer
     def post(self, request, episode_id):
         try:
             episode = EpisodeData.objects.get(id=episode_id)
@@ -125,7 +133,7 @@ class BookMarkView(APIView):
 class AllLikedPodcasts(APIView):
     authentication_classes = [Authentication]
     permission_classes = [IsAuthenticated]
-    serializer_class = CommentSerializer
+    serializer_class = LikedEpisodeSerializer
     def post(self,request):
         liked_episodes = LikeEpisode.objects.filter(user=request.user).values()
         return Response(json.dumps(list(liked_episodes)))
@@ -133,7 +141,7 @@ class AllLikedPodcasts(APIView):
 class AllBookmarkedPodcasts(APIView):
     authentication_classes = [Authentication]
     permission_classes = [IsAuthenticated]
-    serializer_class = CommentSerializer
+    serializer_class = BookMarkSerializer
     def post(self,request):
         bookmarks = BookMark.objects.filter(user=request.user).values()
         return Response(json.dumps(list(bookmarks)))
