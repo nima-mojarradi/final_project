@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import RequestUrl, LikeView, BookMarkView, CommentView, SubscribeView, AllPodcasts, AllBookmarkedPodcasts, AllLikedPodcasts
+from .views import RequestUrl, LikeView, BookMarkView, CommentView, SubscribeView, AllPodcasts, AllBookmarkedPodcasts, AllLikedPodcasts, AllCommentsOnEpisode, CountOfLikes
 
 urlpatterns = [
     path('', AllPodcasts.as_view(), name='all_podcasts'),
@@ -10,4 +10,7 @@ urlpatterns = [
     path('subscribe/<int:channel_id>', SubscribeView.as_view(), name='subscription'),
     path('all_liked/', AllLikedPodcasts.as_view(), name='liked_podcasts'),
     path('all_bookmarked/', AllBookmarkedPodcasts.as_view(), name='bookmarked_podcasts'),
+    path('all_comments/<int:episode_id>', AllCommentsOnEpisode.as_view(), name='all_comments'),
+    path('all_likes/<int:episode_id>', CountOfLikes.as_view(), name='all_likes'),
+
 ]
