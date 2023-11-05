@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-04 17:11+0000\n"
+"POT-Creation-Date: 2023-11-05 03:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: podcast_manager/settings.py:211
+#: podcast_manager/settings.py:205
 msgid "English"
 msgstr "انگلیسی"
 
-#: podcast_manager/settings.py:212
+#: podcast_manager/settings.py:206
 msgid "Persian"
 msgstr "فارسی"
 
@@ -126,6 +126,12 @@ msgstr "شناسه نامعتبر"
 #: user/views.py:40
 msgid "invalid credential!"
 msgstr "شناسه نامتعبر"
+
+#: user/views.py:49
+#, fuzzy
+#| msgid "invalid access token"
+msgid "access_token"
+msgstr "توکن دسترسی نامتعبر"
 
 #: user/views.py:67
 msgid "user is not authenticated"

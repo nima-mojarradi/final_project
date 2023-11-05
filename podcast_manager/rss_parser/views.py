@@ -13,6 +13,7 @@ from django.shortcuts import get_object_or_404
 from user.publisher import publisher
 from django.utils.translation import gettext_lazy as _
 from user.authentication import Authentication
+import json
 import logging
 
 class RequestUrl(APIView):
@@ -32,11 +33,21 @@ class RequestUrl(APIView):
             return Response(status=status.HTTP_201_CREATED)
         
 
+class AllPodcasts(APIView):
+    def post(self,request):
+        podcasts = PodcastData.objects.all().values()
+        return Response(json.dumps(list(podcasts)))
+        
+
 class LikeView(APIView):
     authentication_classes = [Authentication]
     permission_classes = [IsAuthenticated]
     serializer_class = LikedEpisodeSerializer
     # logger = logging.getLogger(__name__)
+
+    def get(self,request):
+        podcasts = LikeEpisode.objects.all().values()
+        return Response(json.dumps(list(podcasts)))
 
     def post(self, request, episode_id):
         episode = EpisodeData.objects.get(id=episode_id)
@@ -109,6 +120,24 @@ class BookMarkView(APIView):
             return Response('the episode you wanted deleted from the bookmarks')
         except Exception as e:
             return Response('something went wrong in your request')
+        
+
+class AllLikedPodcasts(APIView):
+    authentication_classes = [Authentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = CommentSerializer
+    def post(self,request):
+        liked_episodes = LikeEpisode.objects.filter(user=request.user).values()
+        return Response(json.dumps(list(liked_episodes)))
+        
+class AllBookmarkedPodcasts(APIView):
+    authentication_classes = [Authentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = CommentSerializer
+    def post(self,request):
+        bookmarks = BookMark.objects.filter(user=request.user).values()
+        return Response(json.dumps(list(bookmarks)))
+        
 
 class SubscribeView(APIView):
     authentication_classes = [Authentication]
@@ -128,6 +157,3 @@ class SubscribeView(APIView):
             return Response(f'you unfollowed the channel with channel id {channel_id}')
         except Exception as e:
             return Response('something went wrong in your request')
-
-class RecommendationRetrieveView(APIView):
-    pass

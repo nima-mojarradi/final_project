@@ -4,7 +4,7 @@ def log_format(request, response, exception=None):
         'user_id': user_id,
         'user_username': request.user.username if request.user.is_authenticated else ' ',
         'user_email': request.user.email if request.user.is_authenticated else ' ',
-        'user_phone': request.user.phone if request.user.is_authenticated else ' ',
+        'user_phone': request.user.phone_number if request.user.is_authenticated else ' ',
     }
     remote_host = request.META.get("REMOTE_ADDR",'-')
     request_line = request.method
