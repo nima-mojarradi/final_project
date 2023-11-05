@@ -12,7 +12,7 @@ class ElasticHandler(logging.Handler):
 
     def __init__(self):
         super().__init__()
-        self.es = Elasticsearch(f'http://elastic:9200')
+        self.es = Elasticsearch('http://elastic:9200')
         self.sender = LogSender(self.es)
 
     def emit(self, record):
