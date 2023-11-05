@@ -52,6 +52,25 @@ class LoginUserView(CreateAPIView):
         publisher('login', 'user logged in')
         return response
     
+
+class LogoutUserView(APIView):
+    authentication_classes = [Authentication]
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        refresh_token = request.COOKIES.get('refresh_token')
+        
+        if refresh_token:
+            cache.delete(refresh_token)
+        
+        response = Response()
+        response.delete_cookie('refresh_token')
+        request.user.delete()
+        response.data = {
+            'message': 'Logged out successfully.'
+        }
+        
+        return response    
+    
     
 class UserAPIView(APIView):
     def get(self,request):
