@@ -1,12 +1,11 @@
 from rest_framework import serializers
 from .models import EpisodeData, LikeEpisode, PodcastData, Subscription, LikePodcast, Comment, BookMark
-from django.utils.translation import gettext_lazy as _
 
 
 class ModelParserSerializer(serializers.ModelSerializer):
     class Meta:
         model = EpisodeData
-        fields = (_('link'),_('description'),_('title'))
+        fields = ('link','description','title')
         extra_kwargs = {
             'description':{'read_only':True},
             'title':{'read_only':True}
@@ -18,7 +17,7 @@ class LikedPodcastsSerializer(serializers.ModelSerializer):
     episode = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = LikePodcast
-        fields = (_('user'), _('podcast'))
+        fields = ('user', 'podcast')
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -34,7 +33,7 @@ class LikedEpisodeSerializer(serializers.ModelSerializer):
     episode = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = LikeEpisode
-        fields = (_('user'), _('episode'))
+        fields = ('user', 'episode')
 
 
 class BookMarkSerializer(serializers.ModelSerializer):
@@ -42,22 +41,22 @@ class BookMarkSerializer(serializers.ModelSerializer):
     episode = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = BookMark
-        fields = (_('user'), _('episode'))
+        fields = ('user', 'episode')
 
 class SubscribeSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True)
     podcast = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = Subscription
-        fields = (_('user'), _('podcast'))
+        fields = ('user', 'podcast')
 
 class ChannelSerializer(serializers.ModelSerializer):
     subscribed = serializers.SerializerMethodField()
 
     class Meta:
         model = PodcastData
-        fields = [_('id'), _('title'), _('subscribed'), _('description'),_( 'last_update'), _('language'), _('subtitle'),
-                  _('image'), _('author'), _('xml_link'), _('category'), _('owner')]
+        fields = ['id', 'title', 'subscribed', 'description','last_update', 'language', 'subtitle',
+                  'image', 'author', 'xml_link', 'category', 'owner']
         extra_kwargs = {
             'id': {'read_only': True}
         }
