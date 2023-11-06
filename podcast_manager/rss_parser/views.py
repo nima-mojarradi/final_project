@@ -34,7 +34,7 @@ class RequestUrl(APIView):
         
 
 class AllPodcasts(APIView):
-    def post(self,request):
+    def get(self,request):
         podcasts = PodcastData.objects.all().values()
         return Response(json.dumps(list(podcasts)))
         
@@ -67,11 +67,10 @@ class LikeView(APIView):
             msg = {'status':'This episode is not liked!'}
             return Response(msg, status=status.HTTP_404_NOT_FOUND)
 
-class CommentView(APIView):
+class WriteCommentView(APIView):
     authentication_classes = [Authentication]
     permission_classes = [IsAuthenticated]
     serializer_class = CommentSerializer
-
     def post(self, request, podcast_id):
         podcast = EpisodeData.objects.get(id=podcast_id)
         comment = Comment.objects.create(user=request.user, podcast=podcast, context=request.data['context'])
@@ -84,6 +83,10 @@ class CommentView(APIView):
             msg = {'status': _('Unable to add comment!')}
             return Response(msg, status=status.HTTP_400_BAD_REQUEST)
 
+class DeleteCommentView(APIView):
+    authentication_classes = [Authentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = CommentSerializer
     def delete(self, request, comment_id):
         try:
             comment = Comment.objects.get(id=comment_id, user=request.user)
@@ -157,7 +160,7 @@ class SubscribeView(APIView):
             subscription = Subscription.objects.create(user=request.user, channel=channel)
             return Response(f'the channel with id {channel_id} subscribed')
         except Exception as e:
-            return Response('the episode that you want to bookmark is already in bookmarks')
+            return Response('the episode that you want to subscribe is already in subscribed')
     def delete(self, request, channel_id):
         try:
             channel=Subscription.objects.get(channel_id=channel_id)
