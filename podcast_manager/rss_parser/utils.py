@@ -16,10 +16,6 @@ def log_format(request, response, exception=None):
     user_agent=request.headers.get("user-agent")
     event = f"{request.get_full_path()} HTTP/1.1"
 
-    # event = f"{request.resolver_match.app_names[0]}.{request.resolver_match.url_name}" if request.resolver_match.app_names else ' '
-    # event = f"api.{request.resolver_match.app_name}.{request.resolver_match.url_name}"
-    # event = request.resolver_match.url_name
-
     message = str(exception) if exception else 'Request is successfully'
 
     return {

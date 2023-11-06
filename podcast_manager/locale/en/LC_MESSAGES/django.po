@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-05 03:16+0000\n"
+"POT-Creation-Date: 2023-11-06 06:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,76 +26,11 @@ msgstr ""
 msgid "Persian"
 msgstr ""
 
-#: rss_parser/serializer.py:9
-msgid "link"
-msgstr ""
-
-#: rss_parser/serializer.py:9 rss_parser/serializer.py:51
-msgid "description"
-msgstr ""
-
-#: rss_parser/serializer.py:9 rss_parser/serializer.py:51
-msgid "title"
-msgstr ""
-
-#: rss_parser/serializer.py:21 rss_parser/serializer.py:29
-#: rss_parser/serializer.py:37 rss_parser/serializer.py:44
-msgid "user"
-msgstr ""
-
-#: rss_parser/serializer.py:21 rss_parser/serializer.py:44
-msgid "podcast"
-msgstr ""
-
-#: rss_parser/serializer.py:29 rss_parser/serializer.py:37
-msgid "episode"
-msgstr ""
-
-#: rss_parser/serializer.py:51
-msgid "id"
-msgstr ""
-
-#: rss_parser/serializer.py:51
-msgid "subscribed"
-msgstr ""
-
-#: rss_parser/serializer.py:51
-msgid "last_update"
-msgstr ""
-
-#: rss_parser/serializer.py:51
-msgid "language"
-msgstr ""
-
-#: rss_parser/serializer.py:51
-msgid "subtitle"
-msgstr ""
-
-#: rss_parser/serializer.py:52
-msgid "image"
-msgstr ""
-
-#: rss_parser/serializer.py:52
-msgid "author"
-msgstr ""
-
-#: rss_parser/serializer.py:52
-msgid "xml_link"
-msgstr ""
-
-#: rss_parser/serializer.py:52
-msgid "category"
-msgstr ""
-
-#: rss_parser/serializer.py:52
-msgid "owner"
-msgstr ""
-
-#: rss_parser/views.py:50
+#: rss_parser/views.py:51
 msgid "This episode is already liked!"
 msgstr ""
 
-#: rss_parser/views.py:79
+#: rss_parser/views.py:84
 msgid "Unable to add comment!"
 msgstr ""
 
@@ -119,18 +54,14 @@ msgstr ""
 msgid "user_id not in token"
 msgstr ""
 
-#: user/views.py:37
+#: user/views.py:36
 msgid "invalid credential"
 msgstr ""
 
-#: user/views.py:40
+#: user/views.py:39
 msgid "invalid credential!"
 msgstr ""
 
-#: user/views.py:49
-msgid "access_token"
-msgstr ""
-
-#: user/views.py:67
+#: user/views.py:84
 msgid "user is not authenticated"
 msgstr ""

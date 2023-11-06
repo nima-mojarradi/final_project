@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-05 03:16+0000\n"
+"POT-Creation-Date: 2023-11-06 06:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,76 +26,11 @@ msgstr "انگلیسی"
 msgid "Persian"
 msgstr "فارسی"
 
-#: rss_parser/serializer.py:9
-msgid "link"
-msgstr "لینک"
-
-#: rss_parser/serializer.py:9 rss_parser/serializer.py:51
-msgid "description"
-msgstr "توضیحات"
-
-#: rss_parser/serializer.py:9 rss_parser/serializer.py:51
-msgid "title"
-msgstr "تیتر"
-
-#: rss_parser/serializer.py:21 rss_parser/serializer.py:29
-#: rss_parser/serializer.py:37 rss_parser/serializer.py:44
-msgid "user"
-msgstr "کاربر"
-
-#: rss_parser/serializer.py:21 rss_parser/serializer.py:44
-msgid "podcast"
-msgstr "پادکست"
-
-#: rss_parser/serializer.py:29 rss_parser/serializer.py:37
-msgid "episode"
-msgstr "قسمت"
-
-#: rss_parser/serializer.py:51
-msgid "id"
-msgstr "شناسه"
-
-#: rss_parser/serializer.py:51
-msgid "subscribed"
-msgstr "دنبال شده"
-
-#: rss_parser/serializer.py:51
-msgid "last_update"
-msgstr "اخرین بروزرسانی"
-
-#: rss_parser/serializer.py:51
-msgid "language"
-msgstr "زبان"
-
-#: rss_parser/serializer.py:51
-msgid "subtitle"
-msgstr "زیرنویس"
-
-#: rss_parser/serializer.py:52
-msgid "image"
-msgstr "عکس"
-
-#: rss_parser/serializer.py:52
-msgid "author"
-msgstr "سازنده"
-
-#: rss_parser/serializer.py:52
-msgid "xml_link"
-msgstr "لینک فایل"
-
-#: rss_parser/serializer.py:52
-msgid "category"
-msgstr "دسته بندی"
-
-#: rss_parser/serializer.py:52
-msgid "owner"
-msgstr "مالک"
-
-#: rss_parser/views.py:50
+#: rss_parser/views.py:51
 msgid "This episode is already liked!"
 msgstr ""
 
-#: rss_parser/views.py:79
+#: rss_parser/views.py:84
 msgid "Unable to add comment!"
 msgstr ""
 
@@ -119,23 +54,70 @@ msgstr "توکن یافت نشد"
 msgid "user_id not in token"
 msgstr "شناسه کاربر در توکن وجود ندارد"
 
-#: user/views.py:37
+#: user/views.py:36
 msgid "invalid credential"
 msgstr "شناسه نامعتبر"
 
-#: user/views.py:40
+#: user/views.py:39
 msgid "invalid credential!"
 msgstr "شناسه نامتعبر"
 
-#: user/views.py:49
-#, fuzzy
-#| msgid "invalid access token"
-msgid "access_token"
-msgstr "توکن دسترسی نامتعبر"
-
-#: user/views.py:67
+#: user/views.py:84
 msgid "user is not authenticated"
 msgstr "کاربر شناخته نشد"
+
+#~ msgid "link"
+#~ msgstr "لینک"
+
+#~ msgid "description"
+#~ msgstr "توضیحات"
+
+#~ msgid "title"
+#~ msgstr "تیتر"
+
+#~ msgid "user"
+#~ msgstr "کاربر"
+
+#~ msgid "podcast"
+#~ msgstr "پادکست"
+
+#~ msgid "episode"
+#~ msgstr "قسمت"
+
+#~ msgid "id"
+#~ msgstr "شناسه"
+
+#~ msgid "subscribed"
+#~ msgstr "دنبال شده"
+
+#~ msgid "last_update"
+#~ msgstr "اخرین بروزرسانی"
+
+#~ msgid "language"
+#~ msgstr "زبان"
+
+#~ msgid "subtitle"
+#~ msgstr "زیرنویس"
+
+#~ msgid "image"
+#~ msgstr "عکس"
+
+#~ msgid "author"
+#~ msgstr "سازنده"
+
+#~ msgid "xml_link"
+#~ msgstr "لینک فایل"
+
+#~ msgid "category"
+#~ msgstr "دسته بندی"
+
+#~ msgid "owner"
+#~ msgstr "مالک"
+
+#, fuzzy
+#~| msgid "invalid access token"
+#~ msgid "access_token"
+#~ msgstr "توکن دسترسی نامتعبر"
 
 #~ msgid "update_invalid_podcast"
 #~ msgstr "بروزرسانی پادکست با لینک نامتعبر"
