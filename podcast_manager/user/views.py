@@ -47,7 +47,7 @@ class LoginUserView(CreateAPIView):
         response.data = {
             'access_token':access_token
         }
-        publisher('login',{'user_id':user.id, 'massage':'user logged in'})
+        publisher('login',{'user_id':user.id, 'massage':f'user with username {user} logged in'})
         return response
     
 
